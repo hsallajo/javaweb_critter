@@ -1,8 +1,12 @@
 package com.shu.jdnd.course3.critter.user;
 
+import com.shu.jdnd.course3.critter.model.Customer;
+import com.shu.jdnd.course3.critter.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -14,9 +18,14 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private CustomerService customerService;
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+        Customer customer = customerService.createCustomer(new Customer(customerDTO.getName(), customerDTO.getPhoneNumber(), customerDTO.getNotes(), null));
+        customerDTO.setId(customer.getId());
+        return customerDTO;
     }
 
     @GetMapping("/customer")

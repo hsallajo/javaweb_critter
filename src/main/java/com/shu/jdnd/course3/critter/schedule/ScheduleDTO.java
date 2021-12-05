@@ -12,24 +12,24 @@ import java.util.Set;
  */
 public class ScheduleDTO {
     private long id;
-    private List<Long> employeeIds;
-    private List<Long> petIds;
+    private List<java.lang.Long> employeeIds;
+    private List<java.lang.Long> petIds;
     private LocalDate date;
     private Set<EmployeeSkill> activities;
 
-    public List<Long> getEmployeeIds() {
+    public List<java.lang.Long> getEmployeeIds() {
         return employeeIds;
     }
 
-    public void setEmployeeIds(List<Long> employeeIds) {
+    public void setEmployeeIds(List<java.lang.Long> employeeIds) {
         this.employeeIds = employeeIds;
     }
 
-    public List<Long> getPetIds() {
+    public List<java.lang.Long> getPetIds() {
         return petIds;
     }
 
-    public void setPetIds(List<Long> petIds) {
+    public void setPetIds(List<java.lang.Long> petIds) {
         this.petIds = petIds;
     }
 
