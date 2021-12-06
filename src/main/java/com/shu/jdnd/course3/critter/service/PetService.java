@@ -1,11 +1,13 @@
 package com.shu.jdnd.course3.critter.service;
 
+import com.shu.jdnd.course3.critter.model.Customer;
 import com.shu.jdnd.course3.critter.model.Pet;
-import com.shu.jdnd.course3.critter.pet.PetDTO;
+import com.shu.jdnd.course3.critter.repository.CustomerRepository;
 import com.shu.jdnd.course3.critter.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,45 +17,32 @@ public class PetService {
     private PetRepository repository;
 
     @Autowired
-    private CustomerService customerService;
+    private CustomerRepository customerRepository;
 
-    public PetDTO savePet(PetDTO petDTO){
-        System.out.println("PetDTO arguments: name: " + petDTO.getName()
-        + "\nbirth date: " + petDTO.getBirthDate()
-        + "\nowner id: " + petDTO.getOwnerId()
-        + "\ntype: " + petDTO.getType());
-
-        if ( petDTO.getName().equals("")
-                || petDTO.getBirthDate() == null
-                || petDTO.getOwnerId() == 0
-                || petDTO.getType() == null)
-            throw new IllegalArgumentException("Illegal argument in PetDTO");
-
-        if(customerService.addPet(petDTO.getOwnerId(), petDTO)) {
-            return petToPetDTO(repository.save(petDTOtoPet(petDTO)));
+    public Pet savePet(Long ownerId, Pet pet){
+        Customer c = customerRepository.find(ownerId);
+        if(c != null) {
+            pet.setOwner(c);
+            return repository.save(pet);
         }
-        return petDTO;
+        throw new IllegalArgumentException("Pet requires valid owner id");
     }
 
-    public PetDTO getPet(Long petId){
-        Optional<Pet> o = repository.findById(petId);
-        if(o.isEmpty())
-            return new PetDTO();
-        return petToPetDTO(o.get());
+    public Pet getPet(Long petId){
+        Optional<Pet> p = repository.findById(petId);
+        if(p.isEmpty())
+            return new Pet();
+        return p.get();
     }
 
-    private Pet petDTOtoPet(PetDTO petDTO){
-        return new Pet(petDTO.getId(), petDTO.getType(), petDTO.getName(), petDTO.getOwnerId(), petDTO.getBirthDate(), petDTO.getNotes());
+    public List<Pet> getPets(Long ownerId){
+        Customer c = customerRepository.find(ownerId);
+        if(c != null){
+            return repository.findAllByOwner(c);
+        }
+
+        return null;
     }
 
-    private PetDTO petToPetDTO(Pet pet){
-        PetDTO petDTO = new PetDTO();
-        petDTO.setId(pet.getId());
-        petDTO.setName(pet.getName());
-        petDTO.setBirthDate(pet.getBirthDate());
-        petDTO.setNotes(pet.getNotes());
-        petDTO.setType(pet.getPetType());
-        petDTO.setOwnerId(pet.getOwnerId());
-        return petDTO;
-    }
+
 }

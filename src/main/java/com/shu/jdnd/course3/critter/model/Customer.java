@@ -1,8 +1,9 @@
 package com.shu.jdnd.course3.critter.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
@@ -13,24 +14,24 @@ public class Customer extends User {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @ElementCollection
-    private List<Long> petIds;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Pet> pets;
 
     public Customer() {
     }
 
-    public Customer(Long id, String name, String phoneNumber, String notes, List<Long> petIds) {
+    public Customer(Long id, String name, String phoneNumber, String notes, List<Pet> pets) {
         super(id, name);
         this.notes = notes;
         this.phoneNumber = phoneNumber;
-        this.petIds = petIds;
+        this.pets = pets;
     }
 
-    public Customer(String name, String phoneNumber, String notes, List<Long> petIds) {
+    public Customer(String name, String phoneNumber, String notes, List<Pet> pets) {
         super(name);
         this.notes = notes;
         this.phoneNumber = phoneNumber;
-        this.petIds = petIds;
+        this.pets = pets;
     }
 
     public String getNotes() {
@@ -49,11 +50,11 @@ public class Customer extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Long> getPetIds() {
-        return petIds;
+    public List<Pet> getPets() {
+        return pets;
     }
 
-    public void setPetIds(List<Long> petIds) {
-        this.petIds = petIds;
+    public void setPets(List<Pet> petIds) {
+        this.pets = petIds;
     }
 }

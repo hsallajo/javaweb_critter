@@ -3,10 +3,7 @@ package com.shu.jdnd.course3.critter.model;
 import com.shu.jdnd.course3.critter.pet.PetType;
 import org.hibernate.annotations.Nationalized;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -23,8 +20,10 @@ public class Pet {
     @Nationalized
     private String name;
 
-    @Column(nullable = false)
-    private Long ownerId;
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer owner;
+
     private LocalDate birthDate;
 
     @Column(length = 1024)
@@ -33,19 +32,19 @@ public class Pet {
     public Pet() {
     }
 
-    public Pet(Long id, PetType petType, String name, Long ownerId, LocalDate birthDate, String notes) {
+    public Pet(Long id, PetType petType, String name, Customer owner, LocalDate birthDate, String notes) {
         this.id = id;
         this.petType = petType;
         this.name = name;
-        this.ownerId = ownerId;
+        this.owner = owner;
         this.birthDate = birthDate;
         this.notes = notes;
     }
 
-    public Pet(PetType petType, String name, Long ownerId, LocalDate birthDate, String notes) {
+    public Pet(PetType petType, String name, Customer owner, LocalDate birthDate, String notes) {
         this.petType = petType;
         this.name = name;
-        this.ownerId = ownerId;
+        this.owner = owner;
         this.birthDate = birthDate;
         this.notes = notes;
     }
@@ -74,12 +73,12 @@ public class Pet {
         this.name = name;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public Customer getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(Customer owner) {
+        this.owner = owner;
     }
 
     public LocalDate getBirthDate() {
