@@ -33,6 +33,6 @@ public class CustomerRepository {
 
     @SuppressWarnings("unchecked")
     public List<Customer> getAll() {
-        return entityManager.createQuery("select c from Customer c inner join fetch c.pets").getResultList();
+        return entityManager.createQuery("select c from Customer c left join fetch c.pets").getResultList();
     }
 }
