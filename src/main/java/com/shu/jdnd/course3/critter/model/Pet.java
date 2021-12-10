@@ -20,7 +20,7 @@ public class Pet {
     @Nationalized
     private String name;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer owner;
 

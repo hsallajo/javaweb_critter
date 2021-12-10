@@ -1,6 +1,7 @@
 package com.shu.jdnd.course3.critter.user;
 
 import com.shu.jdnd.course3.critter.model.Customer;
+import com.shu.jdnd.course3.critter.model.Pet;
 import com.shu.jdnd.course3.critter.service.CustomerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,12 @@ public class UserController {
     private CustomerDTO customerToCustomerDTO(Customer customer){
         CustomerDTO c = new CustomerDTO();
         BeanUtils.copyProperties(customer, c);
+        ArrayList<Long> petIds = new ArrayList<>();
+        for (Pet p: customer.getPets()
+             ) {
+            petIds.add(p.getId());
+        }
+        c.setPetIds(petIds);
         return c;
     }
 

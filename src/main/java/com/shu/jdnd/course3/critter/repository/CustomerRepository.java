@@ -1,7 +1,6 @@
 package com.shu.jdnd.course3.critter.repository;
 
 import com.shu.jdnd.course3.critter.model.Customer;
-import com.shu.jdnd.course3.critter.user.CustomerDTO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,7 @@ public class CustomerRepository {
 
     public void persist(Customer customer){
         entityManager.persist(customer);
-    };
+    }
 
     public Customer find(Long id){
         return entityManager.find(Customer.class, id);
@@ -32,7 +31,8 @@ public class CustomerRepository {
         entityManager.remove(customer);
     }
 
+    @SuppressWarnings("unchecked")
     public List<Customer> getAll() {
-        return entityManager.createQuery("select c from Customer c").getResultList();
+        return entityManager.createQuery("select c from Customer c inner join fetch c.pets").getResultList();
     }
 }
