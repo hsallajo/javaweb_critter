@@ -111,6 +111,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
+    @Transactional
     public void testChangeEmployeeAvailability() {
         EmployeeDTO employeeDTO = createEmployeeDTO();
         EmployeeDTO emp1 = userController.saveEmployee(employeeDTO);

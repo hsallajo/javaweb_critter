@@ -15,6 +15,7 @@ import java.util.List;
 public class CustomerRepository {
 
     private static final String FIND_OWNER_BY_PET = "select c from Customer c left join fetch c.pets where :pet member of c.pets";
+    private static final String FIND_ALL_CUSTOMERS = "select c from Customer c left join fetch c.pets";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -37,8 +38,8 @@ public class CustomerRepository {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Customer> getAll() {
-        return entityManager.createQuery("select c from Customer c left join fetch c.pets").getResultList();
+    public List<Customer> getAllCustomers() {
+        return entityManager.createQuery(FIND_ALL_CUSTOMERS).getResultList();
     }
 
     public Customer findCustomerByPet(Long petId) {
