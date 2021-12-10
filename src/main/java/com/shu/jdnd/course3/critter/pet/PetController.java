@@ -42,6 +42,8 @@ public class PetController {
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
+        if (ownerId == 0)
+            throw new IllegalArgumentException("Illegal argument: Owner id required");
         List<Pet> pets = petService.getPets(ownerId);
         return petsToPetDTOs(pets);
     }

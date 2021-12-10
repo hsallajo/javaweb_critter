@@ -1,16 +1,21 @@
 package com.shu.jdnd.course3.critter.repository;
 
 import com.shu.jdnd.course3.critter.model.Customer;
+import com.shu.jdnd.course3.critter.model.Pet;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
 @Transactional
 public class CustomerRepository {
+
+    private static final String FIND_OWNER_BY_PET = "select c from Customer c left join fetch c.pets where :pet member of c.pets";
+
     @PersistenceContext
     EntityManager entityManager;
 
@@ -34,5 +39,12 @@ public class CustomerRepository {
     @SuppressWarnings("unchecked")
     public List<Customer> getAll() {
         return entityManager.createQuery("select c from Customer c left join fetch c.pets").getResultList();
+    }
+
+    public Customer findCustomerByPet(Long petId) {
+        Pet p = entityManager.find(Pet.class, petId);
+        TypedQuery<Customer> q = entityManager.createQuery(FIND_OWNER_BY_PET, Customer.class);
+        q.setParameter("pet", p);
+        return q.getResultList().get(0);
     }
 }

@@ -28,4 +28,8 @@ public class CustomerService {
     public Customer getCustomer(Long id){
         return repository.find(id);
     }
+
+    public Customer getCustomerByPetId(Long id) {
+        return repository.findCustomerByPet(id);
+    }
 }

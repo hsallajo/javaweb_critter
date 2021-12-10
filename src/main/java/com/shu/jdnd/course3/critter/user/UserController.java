@@ -26,9 +26,9 @@ public class UserController {
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
         if(customerDTO.getName().equals("") || customerDTO.getPhoneNumber().equals(""))
-            throw new IllegalArgumentException("Invalid CustomerDTO name/phone number value.");
-        Long customerId = customerService.saveCustomer(customerDTOtoCustomer(customerDTO));
-        customerDTO.setId(customerId);
+            throw new IllegalArgumentException("Invalid name/phone number value.");
+
+        customerDTO.setId(customerService.saveCustomer(customerDTOtoCustomer(customerDTO)));
         return customerDTO;
     }
 
@@ -46,7 +46,10 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        if(petId == 0)
+            throw new IllegalArgumentException("Invalid pet id value");
+
+        return customerToCustomerDTO(customerService.getCustomerByPetId(petId));
     }
 
     @PostMapping("/employee")

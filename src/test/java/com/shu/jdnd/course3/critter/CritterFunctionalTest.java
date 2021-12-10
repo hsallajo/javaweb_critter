@@ -88,6 +88,7 @@ public class CritterFunctionalTest {
         PetDTO newPet = petController.savePet(petDTO);
         petDTO.setType(PetType.DOG);
         petDTO.setName("DogName");
+        PetDTO newPet2 = petController.savePet(petDTO);
 
         List<PetDTO> pets = petController.getPetsByOwner(newCustomer.getId());
         Assertions.assertEquals(pets.size(), 2);
