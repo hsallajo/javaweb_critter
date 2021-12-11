@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 @Transactional
@@ -48,26 +47,51 @@ public class UserService {
 
     public Employee getEmployee(Long id){
         Optional<Employee> employee = employeeRepository.findById(id);
-        if(employee.isPresent())
-            return employee.get();
-        return null;
+        return employee.orElse(null);
     }
 
     public void setAvailability(Set<DayOfWeek> daysAvailable, long employeeId){
-        Optional o = employeeRepository.findById(employeeId);
+        Optional<Employee> o = employeeRepository.findById(employeeId);
         if(o.isPresent()){
-            Employee e = (Employee) o.get();
+            Employee e = o.get();
             e.setDaysAvailable(daysAvailable);
             employeeRepository.save(e);
         }
     }
 
     public void setSkills(Set<EmployeeSkill> skills, long employeeId) {
-        Optional o = employeeRepository.findById(employeeId);
+        Optional<Employee> o = employeeRepository.findById(employeeId);
         if(o.isPresent()){
-            Employee e = (Employee) o.get();
+            Employee e = o.get();
             e.setSkills(skills);
             employeeRepository.save(e);
         }
+    }
+
+    public List<Employee> findEmployeesForService(LocalDate date, Set<EmployeeSkill> skills) {
+
+        List<Employee> employees = new ArrayList<>();
+        int requiredSkillsCnt = skills.size();
+
+        List<Employee> res = employeeRepository.findBySkillsInAndDaysAvailable(skills, date.getDayOfWeek());
+
+        /*remove employees who do not have all required skills*/
+
+        for (Employee e: res
+             ) {
+            int matches = 0;
+            for (EmployeeSkill s: skills
+                 ) {
+                if(!e.getSkills().contains(s))
+                    break;
+                matches++;
+            }
+            if(matches == requiredSkillsCnt) {
+                if(!employees.contains(e))
+                    employees.add(e);
+            }
+
+        }
+        return employees;
     }
 }

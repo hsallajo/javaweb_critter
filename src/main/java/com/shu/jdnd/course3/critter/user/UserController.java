@@ -80,8 +80,20 @@ public class UserController {
 
 
     @GetMapping("/employee/availability")
-    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO requestDTO) {
+        if(requestDTO.getDate() == null)
+            throw new IllegalArgumentException("Invalid date param");
+        if(requestDTO.getSkills() == null || requestDTO.getSkills().size() == 0)
+            throw new IllegalArgumentException("Invalid employee skills param");
+
+        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
+        List<Employee> res = userService.findEmployeesForService(requestDTO.getDate(), requestDTO.getSkills());
+
+        for (Employee e : res
+             ) {
+            employeeDTOList.add(employeeToEmployeeDTO(e));
+        }
+        return employeeDTOList;
     }
 
     private Customer customerDTOtoCustomer(CustomerDTO customerDTO){
