@@ -171,6 +171,7 @@ public class CritterFunctionalTest {
 
     @Test
     @DirtiesContext
+    @Transactional
     public void testSchedulePetsForServiceWithEmployee() {
         EmployeeDTO employeeTemp = createEmployeeDTO();
         employeeTemp.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));

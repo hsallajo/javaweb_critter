@@ -13,10 +13,8 @@ import java.util.Set;
 public class Employee extends User{
 
     @ElementCollection
-    @Column(nullable = false)
     private Set<DayOfWeek> daysAvailable;
     @ElementCollection
-    @Column(nullable = false)
     private Set<EmployeeSkill> skills;
 
     public Employee() {

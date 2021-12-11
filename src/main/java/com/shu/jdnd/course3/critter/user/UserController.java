@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -70,7 +69,7 @@ public class UserController {
 
     @PutMapping("/employee/{employeeId}")
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-       userService.setAvailability(daysAvailable, employeeId);
+        userService.setAvailability(daysAvailable, employeeId);
     }
 
     @PutMapping("/employee/skills/{employeeId}")
@@ -121,7 +120,6 @@ public class UserController {
         BeanUtils.copyProperties(employeeDTO, e);
         if (employeeDTO.getId()==0)
             e.setId(null);
-        //e.setSkills(new HashSet<EmployeeSkill>());
         return e;
     }
 
