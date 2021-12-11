@@ -41,7 +41,6 @@ public class ScheduleController {
     public List<ScheduleDTO> getAllSchedules() {
         List<Schedule> res = scheduleService.findAll();
         List<ScheduleDTO> scheduleDTOs = new ArrayList<>();
-
         for (Schedule s: res
              ) {
             scheduleDTOs.add(scheduleToScheduleDTO(s));
@@ -52,25 +51,25 @@ public class ScheduleController {
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        if(petId == 0)
+            throw new IllegalArgumentException("Invalid pet id value.");
+        return schedulesToScheduleDTOS(scheduleService.findSchedulesForPet(petId));
     }
+
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
         if(employeeId == 0)
             throw new IllegalArgumentException("Invalid employee id value.");
-        List<Schedule> res = scheduleService.findSchedulesForEmployee(employeeId);
-        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
-        for (Schedule s: res
-             ) {
-            scheduleDTOS.add(scheduleToScheduleDTO(s));
-        }
-        return scheduleDTOS;
+
+        return schedulesToScheduleDTOS(scheduleService.findSchedulesForEmployee(employeeId));
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+        if(customerId == 0)
+            throw new IllegalArgumentException("Invalid customer id value.");
+        return schedulesToScheduleDTOS(scheduleService.findSchedulesForCustomer(customerId));
     }
 
     private ScheduleDTO scheduleToScheduleDTO(Schedule schedule){
@@ -120,5 +119,15 @@ public class ScheduleController {
         s.setPetList(pets);
         s.setActivities(activities);
         return s;
+    }
+
+    private List<ScheduleDTO> schedulesToScheduleDTOS(List<Schedule> res) {
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+        for (Schedule s : res
+        ) {
+            scheduleDTOS.add(scheduleToScheduleDTO(s));
+        }
+
+        return scheduleDTOS;
     }
 }
