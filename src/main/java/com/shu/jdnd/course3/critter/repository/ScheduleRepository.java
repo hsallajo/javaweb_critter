@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class ScheduleRepository {
 
     private static String FIND_ALL_SCHEDULES = "select s from Schedule s ";
+    private static String FIND_SCHEDULES_FOR_EMPLOYEE = "select s from Schedule s where :e member of s.employeeList";
 
 
     @PersistenceContext
@@ -48,6 +50,13 @@ public class ScheduleRepository {
 
         return entityManager.merge(schedule);
     }
+
+    public List<Schedule> findSchedulesForEmployee(Long id){
+        TypedQuery<Schedule> q = entityManager.createQuery(FIND_SCHEDULES_FOR_EMPLOYEE, Schedule.class);
+        Employee employee = entityManager.getReference(Employee.class, id);
+        q.setParameter("e", employee);
+        return q.getResultList();
+    };
 
 
 }

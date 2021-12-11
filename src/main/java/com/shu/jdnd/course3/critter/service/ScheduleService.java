@@ -22,4 +22,8 @@ public class ScheduleService {
     public Schedule saveSchedule(Schedule schedule){
         return scheduleRepository.saveSchedule(schedule);
     }
+
+    public List<Schedule> findSchedulesForEmployee(Long id){
+        return scheduleRepository.findSchedulesForEmployee(id);
+    }
 }

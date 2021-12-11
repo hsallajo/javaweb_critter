@@ -57,7 +57,15 @@ public class ScheduleController {
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        if(employeeId == 0)
+            throw new IllegalArgumentException("Invalid employee id value.");
+        List<Schedule> res = scheduleService.findSchedulesForEmployee(employeeId);
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+        for (Schedule s: res
+             ) {
+            scheduleDTOS.add(scheduleToScheduleDTO(s));
+        }
+        return scheduleDTOS;
     }
 
     @GetMapping("/customer/{customerId}")

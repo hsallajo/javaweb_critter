@@ -10,14 +10,14 @@ import java.util.Set;
 @Entity
 public class Schedule {
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @Column(nullable = false)
     private List<Employee> employeeList;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @Column(nullable = false)
     private List<Pet> petList;
 
