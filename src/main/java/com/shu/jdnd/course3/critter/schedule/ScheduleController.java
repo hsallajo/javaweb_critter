@@ -29,11 +29,11 @@ public class ScheduleController {
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
 
         if(scheduleDTO.getEmployeeIds().size() == 0)
-            throw new CritterAPIRequestException("Invalid employee id value.");
+            throw new CritterAPIRequestException("Invalid API param: employee id");
         if(scheduleDTO.getPetIds().size() == 0)
-            throw new CritterAPIRequestException("Invalid pet id value.");
+            throw new CritterAPIRequestException("Invalid API param: pet id");
         if(scheduleDTO.getActivities().size() == 0)
-            throw new CritterAPIRequestException("Invalid activity value.");
+            throw new CritterAPIRequestException("Invalid API param: activity");
 
         return scheduleToScheduleDTO(scheduleService.saveSchedule(scheduleDTOToSchedule(scheduleDTO)));
     }
@@ -53,7 +53,7 @@ public class ScheduleController {
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
         if(petId == 0)
-            throw new CritterAPIRequestException("Invalid pet id value.");
+            throw new CritterAPIRequestException("Invalid API param: pet id");
         return schedulesToScheduleDTOS(scheduleService.findSchedulesForPet(petId));
     }
 
@@ -61,7 +61,7 @@ public class ScheduleController {
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
         if(employeeId == 0)
-            throw new CritterAPIRequestException("Invalid employee id value.");
+            throw new CritterAPIRequestException("Invalid API param: employee id");
 
         return schedulesToScheduleDTOS(scheduleService.findSchedulesForEmployee(employeeId));
     }
@@ -69,7 +69,7 @@ public class ScheduleController {
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
         if(customerId == 0)
-            throw new CritterAPIRequestException("Invalid customer id value.");
+            throw new CritterAPIRequestException("Invalid API param: customer id");
         return schedulesToScheduleDTOS(scheduleService.findSchedulesForCustomer(customerId));
     }
 

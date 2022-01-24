@@ -1,5 +1,6 @@
 package com.shu.jdnd.course3.critter.repository;
 
+import com.shu.jdnd.course3.critter.exception.CritterAPIRequestException;
 import com.shu.jdnd.course3.critter.model.Customer;
 import com.shu.jdnd.course3.critter.model.Employee;
 import com.shu.jdnd.course3.critter.model.Pet;
@@ -13,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -20,6 +22,9 @@ public class ScheduleRepository {
 
     @Autowired
     PetRepository petRepository;
+
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     private static final String FIND_ALL_SCHEDULES = "select s from Schedule s ";
     private static final String FIND_SCHEDULES_FOR_EMPLOYEE = "select s from Schedule s where :employee member of s.employeeList";
@@ -36,17 +41,22 @@ public class ScheduleRepository {
         List<Employee> employeeRefList = new ArrayList<>();
         for (Employee e: schedule.getEmployeeList()
              ) {
-            Employee ref = entityManager.getReference(Employee.class, e.getId());
-            if(ref != null)
-                employeeRefList.add(ref);
+            Optional<Employee> employee = employeeRepository.findById(e.getId());
+            if(employee.isPresent())
+                employeeRefList.add(entityManager.getReference(Employee.class, e.getId()));
+            else
+                throw new CritterAPIRequestException("Critter API exception: Employee not found in database");
         }
 
         List<Pet> petRefList = new ArrayList<>();
         for (Pet p: schedule.getPetList()
              ) {
-            Pet ref = entityManager.getReference(Pet.class, p.getId());
-            if(ref != null)
-                petRefList.add(ref);
+            Optional<Pet> pet = petRepository.findById(p.getId());
+            if(pet.isPresent())
+                petRefList.add(entityManager.getReference(Pet.class, p.getId()));
+            else
+                throw new CritterAPIRequestException("Critter API exception: Pet not found in database");
+
         }
 
         schedule.setEmployeeList(employeeRefList);

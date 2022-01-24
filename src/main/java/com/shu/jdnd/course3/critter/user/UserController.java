@@ -27,8 +27,11 @@ public class UserController {
 
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        if(customerDTO.getName().equals("") || customerDTO.getPhoneNumber().equals(""))
-            throw new CritterAPIRequestException("Invalid API param: customer name/phone number ");
+        if(customerDTO.getName() == null || customerDTO.getName().equals(""))
+            throw new CritterAPIRequestException("Invalid API param: customer name");
+
+        if(customerDTO.getPhoneNumber() == null || customerDTO.getPhoneNumber().equals(""))
+            throw new CritterAPIRequestException("Invalid API param: phone number");
 
         customerDTO.setId(userService.saveCustomer(customerDTOtoCustomer(customerDTO)));
         return customerDTO;
@@ -49,7 +52,7 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         if(petId == 0)
-            throw new CritterAPIRequestException("Invalid pet id value");
+            throw new CritterAPIRequestException("Invalid API param: pet id");
 
         return customerToCustomerDTO(userService.getCustomerByPetId(petId));
     }
@@ -69,7 +72,6 @@ public class UserController {
         if (employee != null)
             return employeeToEmployeeDTO(employee);
 
-        System.out.println("Invalid employeeId");
         return e;
 
     }
@@ -88,9 +90,9 @@ public class UserController {
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO requestDTO) {
         if(requestDTO.getDate() == null)
-            throw new CritterAPIRequestException("Invalid date param");
+            throw new CritterAPIRequestException("Invalid API param: date");
         if(requestDTO.getSkills() == null || requestDTO.getSkills().size() == 0)
-            throw new CritterAPIRequestException("Invalid employee skills param");
+            throw new CritterAPIRequestException("Invalid API param: employee skills");
 
         List<EmployeeDTO> employeeDTOList = new ArrayList<>();
         List<Employee> res = userService.findEmployeesForService(requestDTO.getDate(), requestDTO.getSkills());
