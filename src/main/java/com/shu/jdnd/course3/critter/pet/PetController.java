@@ -1,5 +1,6 @@
 package com.shu.jdnd.course3.critter.pet;
 
+import com.shu.jdnd.course3.critter.exception.CritterAPIRequestException;
 import com.shu.jdnd.course3.critter.model.Pet;
 import com.shu.jdnd.course3.critter.service.PetService;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +26,7 @@ public class PetController {
                 || petDTO.getBirthDate() == null
                 || petDTO.getOwnerId() == 0
                 || petDTO.getType() == null)
-            throw new IllegalArgumentException("Illegal argument in PetDTO");
+            throw new CritterAPIRequestException("Illegal argument in PetDTO");
 
         return petToPetDTO(petService.savePet(petDTO.getOwnerId(), petDTOtoPet(petDTO)));
     }
@@ -33,13 +34,14 @@ public class PetController {
     @PostMapping("/{ownerId}")
     public PetDTO savePetWithPath(@PathVariable long ownerId, @RequestBody PetDTO petDTO) {
 
-        if ( petDTO.getName().equals("")
+        if ( petDTO.getName() == null
+                || petDTO.getName().equals("")
                 || petDTO.getBirthDate() == null
                 || petDTO.getType() == null)
-            throw new IllegalArgumentException("Illegal argument in PetDTO");
+            throw new CritterAPIRequestException("Invalid API param");
 
         if( ownerId == 0)
-            throw new IllegalArgumentException("Illegal ownerId argument");
+            throw new CritterAPIRequestException("Invalid ownerId param");
 
         return petToPetDTO(petService.savePet(ownerId, petDTOtoPet(petDTO)));
     }
@@ -57,7 +59,7 @@ public class PetController {
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
         if (ownerId == 0)
-            throw new IllegalArgumentException("Illegal argument: Owner id required");
+            throw new CritterAPIRequestException("Illegal argument: Owner id required");
         List<Pet> pets = petService.getPets(ownerId);
         return petsToPetDTOs(pets);
     }

@@ -1,5 +1,6 @@
 package com.shu.jdnd.course3.critter.service;
 
+import com.shu.jdnd.course3.critter.exception.CritterAPIRequestException;
 import com.shu.jdnd.course3.critter.model.Customer;
 import com.shu.jdnd.course3.critter.model.Pet;
 import com.shu.jdnd.course3.critter.repository.CustomerRepository;
@@ -27,7 +28,8 @@ public class PetService {
             pet.setOwner(c);
             return repository.save(pet);
         }
-        throw new IllegalArgumentException("Pet requires valid owner id");
+        throw new CritterAPIRequestException("Pet requires valid owner id");
+        //throw new IllegalArgumentException("Pet requires valid owner id");
     }
 
     public Pet getPet(Long petId){

@@ -1,5 +1,6 @@
 package com.shu.jdnd.course3.critter.schedule;
 
+import com.shu.jdnd.course3.critter.exception.CritterAPIRequestException;
 import com.shu.jdnd.course3.critter.model.Employee;
 import com.shu.jdnd.course3.critter.model.Pet;
 import com.shu.jdnd.course3.critter.model.Schedule;
@@ -28,11 +29,11 @@ public class ScheduleController {
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
 
         if(scheduleDTO.getEmployeeIds().size() == 0)
-            throw new IllegalArgumentException("Invalid employee id value.");
+            throw new CritterAPIRequestException("Invalid employee id value.");
         if(scheduleDTO.getPetIds().size() == 0)
-            throw new IllegalArgumentException("Invalid pet id value.");
+            throw new CritterAPIRequestException("Invalid pet id value.");
         if(scheduleDTO.getActivities().size() == 0)
-            throw new IllegalArgumentException("Invalid activity value.");
+            throw new CritterAPIRequestException("Invalid activity value.");
 
         return scheduleToScheduleDTO(scheduleService.saveSchedule(scheduleDTOToSchedule(scheduleDTO)));
     }
@@ -52,7 +53,7 @@ public class ScheduleController {
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
         if(petId == 0)
-            throw new IllegalArgumentException("Invalid pet id value.");
+            throw new CritterAPIRequestException("Invalid pet id value.");
         return schedulesToScheduleDTOS(scheduleService.findSchedulesForPet(petId));
     }
 
@@ -60,7 +61,7 @@ public class ScheduleController {
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
         if(employeeId == 0)
-            throw new IllegalArgumentException("Invalid employee id value.");
+            throw new CritterAPIRequestException("Invalid employee id value.");
 
         return schedulesToScheduleDTOS(scheduleService.findSchedulesForEmployee(employeeId));
     }
@@ -68,7 +69,7 @@ public class ScheduleController {
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
         if(customerId == 0)
-            throw new IllegalArgumentException("Invalid customer id value.");
+            throw new CritterAPIRequestException("Invalid customer id value.");
         return schedulesToScheduleDTOS(scheduleService.findSchedulesForCustomer(customerId));
     }
 

@@ -1,5 +1,6 @@
 package com.shu.jdnd.course3.critter.user;
 
+import com.shu.jdnd.course3.critter.exception.CritterAPIRequestException;
 import com.shu.jdnd.course3.critter.model.Customer;
 import com.shu.jdnd.course3.critter.model.Employee;
 import com.shu.jdnd.course3.critter.model.Pet;
@@ -27,7 +28,7 @@ public class UserController {
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
         if(customerDTO.getName().equals("") || customerDTO.getPhoneNumber().equals(""))
-            throw new IllegalArgumentException("Invalid name/phone number value.");
+            throw new CritterAPIRequestException("Invalid API param: customer name/phone number ");
 
         customerDTO.setId(userService.saveCustomer(customerDTOtoCustomer(customerDTO)));
         return customerDTO;
@@ -48,7 +49,7 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         if(petId == 0)
-            throw new IllegalArgumentException("Invalid pet id value");
+            throw new CritterAPIRequestException("Invalid pet id value");
 
         return customerToCustomerDTO(userService.getCustomerByPetId(petId));
     }
@@ -87,9 +88,9 @@ public class UserController {
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO requestDTO) {
         if(requestDTO.getDate() == null)
-            throw new IllegalArgumentException("Invalid date param");
+            throw new CritterAPIRequestException("Invalid date param");
         if(requestDTO.getSkills() == null || requestDTO.getSkills().size() == 0)
-            throw new IllegalArgumentException("Invalid employee skills param");
+            throw new CritterAPIRequestException("Invalid employee skills param");
 
         List<EmployeeDTO> employeeDTOList = new ArrayList<>();
         List<Employee> res = userService.findEmployeesForService(requestDTO.getDate(), requestDTO.getSkills());
