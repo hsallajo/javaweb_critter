@@ -30,6 +30,20 @@ public class PetController {
         return petToPetDTO(petService.savePet(petDTO.getOwnerId(), petDTOtoPet(petDTO)));
     }
 
+    @PostMapping("/{ownerId}")
+    public PetDTO savePetWithPath(@PathVariable long ownerId, @RequestBody PetDTO petDTO) {
+
+        if ( petDTO.getName().equals("")
+                || petDTO.getBirthDate() == null
+                || petDTO.getType() == null)
+            throw new IllegalArgumentException("Illegal argument in PetDTO");
+
+        if( ownerId == 0)
+            throw new IllegalArgumentException("Illegal ownerId argument");
+
+        return petToPetDTO(petService.savePet(ownerId, petDTOtoPet(petDTO)));
+    }
+
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
         return petToPetDTO(petService.getPet(petId));

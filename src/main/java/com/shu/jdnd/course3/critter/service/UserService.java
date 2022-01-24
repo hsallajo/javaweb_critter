@@ -55,9 +55,8 @@ public class UserService {
         if(o.isPresent()){
             Employee e = o.get();
             e.setDaysAvailable(daysAvailable);
-            Employee employee = employeeRepository.save(e);
+            employeeRepository.save(e);
         }
-        System.out.println("find by employee (id= " + o + ") had 0 results");
     }
 
     public void setSkills(Set<EmployeeSkill> skills, long employeeId) {

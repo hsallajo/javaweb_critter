@@ -60,11 +60,17 @@ public class UserController {
         return employeeDTO;
     }
 
-    @PostMapping("/employee/{employeeId}")
+    @GetMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        if(employeeId == 0)
-            throw new IllegalArgumentException("Invalid employeeId");
-        return employeeToEmployeeDTO(userService.getEmployee(employeeId));
+        EmployeeDTO e = new EmployeeDTO();
+
+        Employee employee = userService.getEmployee(employeeId);
+        if (employee != null)
+            return employeeToEmployeeDTO(employee);
+
+        System.out.println("Invalid employeeId");
+        return e;
+
     }
 
     @PutMapping("/employee/{employeeId}")
